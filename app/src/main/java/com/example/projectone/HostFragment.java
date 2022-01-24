@@ -1,20 +1,20 @@
 package com.example.projectone;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.projectone.databinding.FragmentSecondBinding;
 
-public class SecondFragment extends Fragment {
+import java.net.ServerSocket;
 
+public class HostFragment extends Fragment {
+    public static Thread serverThread;
     private FragmentSecondBinding binding;
-
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -37,5 +37,4 @@ public class SecondFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }

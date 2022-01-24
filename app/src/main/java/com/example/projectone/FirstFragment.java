@@ -40,11 +40,34 @@ public class FirstFragment extends Fragment {
                 if (IPv4Validator.isValid(ip)) {
                     NavHostFragment.findNavController(FirstFragment.this)
                             .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                    NetworkManager nwmng = new NetworkManager(ip, false);
+                    HostFragment.serverThread = new Thread(nwmng);
+                    HostFragment.serverThread.start();
                 }else{
                 Log.e("Network", "Not a valid ip " + ip);
                 }
             }
         });
+
+        binding.buttonHost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    NavHostFragment.findNavController(FirstFragment.this)
+                            .navigate(R.id.action_FirstFragment_to_HostFragment);
+                NetworkManager nwmng = null;
+
+                    nwmng = new NetworkManager("127.0.0.1", true);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    });
+                    new Thread(nwmng).start();
+
+            }
+        });
+
     }
 
     @Override

@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_HostFragment"
+            app:destination="@id/HostFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -25,4 +28,16 @@
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/HostFragment"
+        android:name="com.example.projectone.HostFragment"
+        android:label="@string/host_fragment_label"
+        tools:layout="@layout/fragment_host">
+
+        <action
+            android:id="@+id/action_HostFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+
+
 </navigation>

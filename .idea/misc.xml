@@ -5,7 +5,9 @@
       <map>
         <entry key="..\:/Users/Fin/AndroidStudioProjects/ProjectOne/app/src/main/res/layout/activity_main.xml" value="0.2015625" />
         <entry key="..\:/Users/Fin/AndroidStudioProjects/ProjectOne/app/src/main/res/layout/content_main.xml" value="0.2015625" />
-        <entry key="..\:/Users/Fin/AndroidStudioProjects/ProjectOne/app/src/main/res/layout/fragment_first.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/Fin/AndroidStudioProjects/ProjectOne/app/src/main/res/layout/fragment_first.xml" value="0.33" />
+        <entry key="..\:/Users/Fin/AndroidStudioProjects/ProjectOne/app/src/main/res/layout/fragment_host.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/Fin/AndroidStudioProjects/ProjectOne/app/src/main/res/layout/fragment_second.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Fin/AndroidStudioProjects/ProjectOne/app/src/main/res/menu/menu_main.xml" value="0.20520833333333333" />
       </map>
     </option>
