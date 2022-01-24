@@ -3,6 +3,7 @@ package com.example.projectone;
 import static java.lang.String.*;
 
 import android.util.Log;
+import android.widget.TextView;
 
 import com.example.projectone.message.Message;
 import com.example.projectone.message.MessageTypes;
@@ -27,9 +28,16 @@ public class NetworkManager implements Runnable{
     private ServerSocket serverSocket;
     private ArrayList<Socket> connectedClients = new ArrayList<Socket>();
     private String ownID;
+    HostFragment hostFragment;
     public NetworkManager(String ip, boolean isHost){
         this.ip = ip;
         this.isHost = isHost;
+    }
+
+    public NetworkManager(String ip, boolean isHost, HostFragment hostFragment) {
+        this(ip, isHost);
+        this.hostFragment = hostFragment;
+
     }
 
 
@@ -61,6 +69,9 @@ public class NetworkManager implements Runnable{
                         Socket socket = serverSocket.accept();
                         Log.i("Network","Client connected");
                         connectedClients.add(socket);
+                        android.os.Message str = android.os.Message.obtain(hostFragment.myTextHandler);
+                        str.obj = socket.getRemoteSocketAddress().toString();
+                        str.sendToTarget();
                         OutputStream outputStream = socket.getOutputStream();
                         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
                         String sender = ownID;

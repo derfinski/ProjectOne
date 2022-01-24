@@ -2,6 +2,8 @@ package com.example.projectone;
 
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ public class HostFragment extends Fragment {
     public static Thread serverThread;
     private FragmentSecondBinding binding;
     private String ip;
+    public Handler myTextHandler;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -52,10 +55,21 @@ public class HostFragment extends Fragment {
             }
         }).start();
         NetworkManager nwmng = null;
-        nwmng = new NetworkManager("127.0.0.1", true);
+        nwmng = new NetworkManager("127.0.0.1", true, this);
         new Thread(nwmng).start();
+        myTextHandler = new Handler(new Handler.Callback() {
+
+            @Override
+            public boolean handleMessage(android.os.Message stringMessage) {
+
+                binding.clientsConnected.append((String) stringMessage.obj + "\n");
+                return true;
+            }
+        });
+
 
     }
+
 
     @Override
     public void onDestroyView() {

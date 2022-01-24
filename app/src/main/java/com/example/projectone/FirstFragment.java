@@ -18,7 +18,7 @@ import java.net.UnknownHostException;
 public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
-    private Inet4Address ipOfHost;
+    private String ipOfHost;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -36,15 +36,13 @@ public class FirstFragment extends Fragment {
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String ip = binding.ipAddr.getText().toString();
-                if (IPv4Validator.isValid(ip)) {
+                ipOfHost = binding.ipAddr.getText().toString();
+                if (IPv4Validator.isValid(ipOfHost)) {
                     NavHostFragment.findNavController(FirstFragment.this)
                             .navigate(R.id.action_FirstFragment_to_SecondFragment);
-                    NetworkManager nwmng = new NetworkManager(ip, false);
-                    HostFragment.serverThread = new Thread(nwmng);
-                    HostFragment.serverThread.start();
+
                 }else{
-                Log.e("Network", "Not a valid ip " + ip);
+                Log.e("Network", "Not a valid ip " + ipOfHost);
                 }
             }
         });
