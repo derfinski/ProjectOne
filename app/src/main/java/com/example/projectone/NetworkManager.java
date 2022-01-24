@@ -4,6 +4,10 @@ import static java.lang.String.*;
 
 import android.util.Log;
 
+import com.example.projectone.message.Message;
+import com.example.projectone.message.MessageTypes;
+import com.example.projectone.message.RawMessage;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,9 +18,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 
 public class NetworkManager implements Runnable{
     private Socket client;
@@ -24,6 +26,7 @@ public class NetworkManager implements Runnable{
     private boolean isHost;
     private ServerSocket serverSocket;
     private ArrayList<Socket> connectedClients = new ArrayList<Socket>();
+    private String ownID;
     public NetworkManager(String ip, boolean isHost){
         this.ip = ip;
         this.isHost = isHost;
@@ -44,6 +47,7 @@ public class NetworkManager implements Runnable{
     }
 
     private void bindSocket() {
+        ownID = "SERVER";
         try {
             serverSocket = new ServerSocket(1812);
         } catch (IOException e) {
@@ -59,8 +63,8 @@ public class NetworkManager implements Runnable{
                         connectedClients.add(socket);
                         OutputStream outputStream = socket.getOutputStream();
                         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-                        String sender = "SERVER";
-                        String typ = MessageTypes.SUCCESS.name();
+                        String sender = ownID;
+                        String typ = MessageTypes.INIT.name();
                         int clientID = connectedClients.size();
                         dataOutputStream.writeUTF(format("%s:%s:%d",sender,typ,clientID));
 
@@ -95,8 +99,9 @@ public class NetworkManager implements Runnable{
                     while (true) {
                         DataInputStream dIn = new DataInputStream(client.getInputStream());
                         String message = dIn.readUTF();
-                        Message msg = Message.parseMessage(message);
-                        Log.i(LogTags.MessageResieved.toString(), message);
+                        RawMessage msg = Message.parseMessage(message);
+                        Log.i(LogTags.MessageResieved.toString(), msg.toString());
+
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

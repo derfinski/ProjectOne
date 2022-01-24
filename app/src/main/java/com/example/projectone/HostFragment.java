@@ -51,8 +51,6 @@ public class HostFragment extends Fragment {
                 }
             }
         }).start();
-
-
         NetworkManager nwmng = null;
         nwmng = new NetworkManager("127.0.0.1", true);
         new Thread(nwmng).start();
