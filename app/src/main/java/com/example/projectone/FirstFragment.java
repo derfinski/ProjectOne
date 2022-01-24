@@ -54,16 +54,7 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
                     NavHostFragment.findNavController(FirstFragment.this)
                             .navigate(R.id.action_FirstFragment_to_HostFragment);
-                NetworkManager nwmng = null;
 
-                    nwmng = new NetworkManager("127.0.0.1", true);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                        }
-                    });
-                    new Thread(nwmng).start();
 
             }
         });

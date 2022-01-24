@@ -1,20 +1,29 @@
 package com.example.projectone;
 
+import static java.lang.String.*;
+
 import android.util.Log;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Inet4Address;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NetworkManager implements Runnable{
     private Socket client;
     private String ip;
     private boolean isHost;
     private ServerSocket serverSocket;
+    private ArrayList<Socket> connectedClients = new ArrayList<Socket>();
     public NetworkManager(String ip, boolean isHost){
         this.ip = ip;
         this.isHost = isHost;
@@ -28,14 +37,7 @@ public class NetworkManager implements Runnable{
             createSocket(ip);
         }else{
             bindSocket();
-            try{
-                while(true){
-                    Socket socket = serverSocket.accept();
-                    Log.i("Network","Client connected");
-                }
-            }catch (IOException e){
-                //empty
-            }
+
 
         }
 
@@ -47,20 +49,61 @@ public class NetworkManager implements Runnable{
         } catch (IOException e) {
             Log.e("Network", "Failed to create Server");
         }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    while(true){
+                        Socket socket = serverSocket.accept();
+                        Log.i("Network","Client connected");
+                        connectedClients.add(socket);
+                        OutputStream outputStream = socket.getOutputStream();
+                        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+                        String sender = "SERVER";
+                        String typ = MessageTypes.SUCCESS.name();
+                        int clientID = connectedClients.size();
+                        dataOutputStream.writeUTF(format("%s:%s:%d",sender,typ,clientID));
+
+                    }
+                }catch (IOException e){
+                    //empty
+                }
+            }
+        }).start();
+
     }
+
+    //region Client
 
     public void createSocket(String ip){
         try {
             client = new Socket();
             client.connect(new InetSocketAddress(Inet4Address.getByName(ip), 1812), 1000);
         }catch(UnknownHostException unk){
-            Log.e("Network","Unk Host");
+            Log.e(LogTags.Network.toString(),"Unk Host");
         } catch (SocketTimeoutException timeoutException){
-            Log.e("network", "Timeout");
+            Log.e(LogTags.Network.toString(), "Timeout");
         } catch (IOException e) {
-            Log.e("Network","Socket error " + e.getLocalizedMessage());
+            Log.e(LogTags.Network.toString(),"Socket error " + e.getLocalizedMessage());
         }
-        Log.i("Network", "Socket created successfully");
+        Log.i(LogTags.Network.toString(), "Socket created successfully");
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        DataInputStream dIn = new DataInputStream(client.getInputStream());
+                        String message = dIn.readUTF();
+                        Message msg = Message.parseMessage(message);
+                        Log.i(LogTags.MessageResieved.toString(), message);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
     }
+    //endRegion
 }
